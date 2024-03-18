@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using OpenMart.Data.Context;
 
@@ -13,6 +14,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<OpenMartContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("OpenMart"));
+});
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'V";
+    options.SubstituteApiVersionInUrl = true;
 });
 
 var app = builder.Build();
