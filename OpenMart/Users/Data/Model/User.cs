@@ -42,6 +42,30 @@ public class User
     public bool IsEmailConfirmed { get; set; }
     
     [Required]
+    [DefaultValue(false)]
+    public bool IsLocked { get; set; }
+    
+    [Required]
+    [DefaultValue(0)]
+    public short InvalidLoginAttempts { get; set; }
+
+    [NotMapped]
+    public bool CanLogin => !this.IsLocked;
+    
+    [Required]
     public DateTime CreatedAt { get; set; }
+    
     public DateTime? UpdatedAt { get; set; }
+
+    public void ResetLockTracking()
+    {
+        this.IsLocked = false;
+        this.InvalidLoginAttempts = 0;
+    }
+
+    public void UpdateLockTracking(int maxTries)
+    {
+        this.InvalidLoginAttempts += 1;
+        this.IsLocked = this.InvalidLoginAttempts >= maxTries;
+    }
 }

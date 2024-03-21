@@ -14,13 +14,13 @@ namespace OpenMart.Users.Controllers;
 public class UserAuthController : ControllerBase
 {
     private readonly IMapper _mapper;
-    private readonly OpenMartDbContext _openMartDbDbContext;
+    private readonly OpenMartDbContext _openMartDbContext;
     private readonly IConfiguration _config;
     
-    public UserAuthController(IMapper mapper, OpenMartDbContext openMartDbDbContext, IConfiguration config)
+    public UserAuthController(IMapper mapper, OpenMartDbContext openMartDbContext, IConfiguration config)
     {
         _mapper = mapper;
-        _openMartDbDbContext = openMartDbDbContext;
+        _openMartDbContext = openMartDbContext;
         _config = config;
     }
     
@@ -31,30 +31,35 @@ public class UserAuthController : ControllerBase
         var (hash, salt) = HashPassword(request.Password);
         user.PasswordHash = hash;
         user.PasswordSalt = salt;
-        await _openMartDbDbContext.Users.AddAsync(user);
-        await _openMartDbDbContext.SaveChangesAsync();
+        await _openMartDbContext.Users.AddAsync(user);
+        await _openMartDbContext.SaveChangesAsync();
         return Ok();
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
-    {
-        var user = await _openMartDbDbContext.Users.FirstOrDefaultAsync(
+    {   
+        var user = await _openMartDbContext.Users.FirstOrDefaultAsync(
             u => u.Email == request.UsernameOrEmail || u.Username == request.UsernameOrEmail);
         
-        if (user == null)
+        if (user is not { CanLogin: true })
         {
             return Unauthorized();
         }
         
         var isPasswordValid = ValidatePassword(request.Password, user.PasswordHash, user.PasswordSalt);
 
-        if (!isPasswordValid)
+        if (isPasswordValid)
         {
-            return Unauthorized();
+            user.ResetLockTracking();
+            await _openMartDbContext.SaveChangesAsync();
+            return Ok();
         }
-
-        return Ok();
+        
+        // TODO: Get max tries parameter
+        user.UpdateLockTracking(5);
+        await _openMartDbContext.SaveChangesAsync();
+        return Unauthorized();
     }
     
     private (string Hash, string Salt) HashPassword(string password)
