@@ -20,7 +20,11 @@ public class User
     
     [MaxLength(100)]
     [Required]
-    public string Password { get; set; } = null!;
+    public string PasswordHash { get; set; } = null!;
+    
+    [MaxLength(100)]
+    [Required]
+    public string PasswordSalt { get; set; } = null!;
 
     [MaxLength(320)]
     [Required]

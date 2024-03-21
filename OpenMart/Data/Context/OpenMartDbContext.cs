@@ -4,9 +4,9 @@ using OpenMart.Users.Data.Model;
 
 namespace OpenMart.Data.Context;
 
-public class OpenMartContext : DbContext
+public class OpenMartDbContext : DbContext
 {
-    public OpenMartContext(DbContextOptions<OpenMartContext> options) : base(options)
+    public OpenMartDbContext(DbContextOptions<OpenMartDbContext> options) : base(options)
     {
     }
 

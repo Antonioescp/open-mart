@@ -12,8 +12,8 @@ using OpenMart.Data.Context;
 namespace OpenMart.Data.Migrations
 {
     [DbContext(typeof(OpenMartDbContext))]
-    [Migration("20240318210458_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240318225041_UserPasswordHashing")]
+    partial class UserPasswordHashing
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,7 +56,12 @@ namespace OpenMart.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordSalt")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");

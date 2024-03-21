@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<OpenMartContext>(options =>
+builder.Services.AddDbContext<OpenMartDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("OpenMart"));
 });
@@ -27,6 +27,8 @@ builder.Services.AddApiVersioning(options =>
     options.GroupNameFormat = "'v'V";
     options.SubstituteApiVersionInUrl = true;
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

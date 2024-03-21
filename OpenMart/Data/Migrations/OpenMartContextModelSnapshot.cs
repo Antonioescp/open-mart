@@ -10,7 +10,7 @@ using OpenMart.Data.Context;
 
 namespace OpenMart.Data.Migrations
 {
-    [DbContext(typeof(OpenMartContext))]
+    [DbContext(typeof(OpenMartDbContext))]
     partial class OpenMartContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -53,7 +53,12 @@ namespace OpenMart.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordSalt")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
