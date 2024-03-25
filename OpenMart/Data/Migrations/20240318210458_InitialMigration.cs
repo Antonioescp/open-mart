@@ -41,22 +41,6 @@ namespace OpenMart.Data.Migrations
                 table: "Users",
                 column: "Username",
                 unique: true);
-
-            migrationBuilder.Sql(@"CREATE TRIGGER [dbo].[Users_UpdatedAt] ON [dbo].[Users]
-                                        AFTER UPDATE
-                                    AS
-                                    BEGIN
-                                        SET NOCOUNT ON;
-
-                                        IF ((SELECT TRIGGER_NESTLEVEL()) > 1) RETURN;
-
-                                        UPDATE [user]
-                                        SET UpdatedAt = GETUTCDATE()
-                                        FROM dbo.Users AS [user]
-                                            INNER JOIN [inserted] 
-                                                ON [inserted].Id = [user].Id;
-                                    END
-                                    ");
         }
 
         /// <inheritdoc />

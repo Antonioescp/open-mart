@@ -1,6 +1,5 @@
-﻿using System.Data.Common;
-using Microsoft.EntityFrameworkCore;
-using OpenMart.Users.Data.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using OpenMart.ExtraSharp.Metadata;
 
 namespace OpenMart.Data.Context;
 
@@ -16,15 +15,13 @@ public class OpenMartDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<User>(typeBuilder =>
-        {
-            typeBuilder
-                .Property(usr => usr.IsEmailConfirmed)
-                .HasDefaultValue(false);
-            
-            typeBuilder
-                .Property(usr => usr.CreatedAt)
-                .HasDefaultValueSql("getutcdate()");
-        });
+        base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(typeof(OpenMartDbContext).Assembly);
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.AddInterceptors(new TimestampInterceptor());
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using OpenMart.ExtraSharp.Metadata;
+using OpenMart.Roles.Data.Model;
 
 namespace OpenMart.Users.Data.Model;
 
@@ -14,51 +17,31 @@ public class User
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 
-    [MaxLength(30)]
-    [Required]
-    public string Username { get; set; } = null!;
+    [MaxLength(30)] public string Username { get; set; } = null!;
     
-    [MaxLength(100)]
-    [Required]
-    public string PasswordHash { get; set; } = null!;
+    [MaxLength(100)] public string PasswordHash { get; set; } = null!;
     
-    [MaxLength(100)]
-    [Required]
-    public string PasswordSalt { get; set; } = null!;
+    [MaxLength(100)] public string PasswordSalt { get; set; } = null!;
 
-    [MaxLength(320)]
-    [Required]
-    public string Email { get; set; } = null!;
+    [MaxLength(320)] public string Email { get; set; } = null!;
 
-    [MaxLength(100)]
-    [Required]
-    public string FirstName { get; set; } = null!;
+    [MaxLength(100)] public string FirstName { get; set; } = null!;
 
-    [MaxLength(100)]
-    [Required]
-    public string LastName { get; set; } = null!;
+    [MaxLength(100)] public string LastName { get; set; } = null!;
 
-    [Required]
     public bool IsEmailConfirmed { get; set; }
     
-    [Required]
-    [DefaultValue(false)]
-    public bool IsLocked { get; set; }
+    [DefaultValue(false)] public bool IsLocked { get; set; }
+    [DefaultValue(0)] public short InvalidLoginAttempts { get; set; }
     
-    [Required]
-    [DefaultValue(0)]
-    public short InvalidLoginAttempts { get; set; }
+    public Timestamp Timestamp { get; set; } = new();
+    [NotMapped] public bool CanLogin => !this.IsLocked;
+    [NotMapped] public string FullName => $"{this.FirstName} {this.LastName}";
     
-    [Required]
-    public DateTime CreatedAt { get; set; }
-    
-    public DateTime? UpdatedAt { get; set; }
-
-    [NotMapped]
-    public bool CanLogin => !this.IsLocked;
-
-    [NotMapped]
-    public string FullName => $"{this.FirstName} {this.LastName}";
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    [NotMapped] public ICollection<Role> Roles => this.UserRoles.Select(userRole => userRole.Role).ToList();
+    [NotMapped] public ICollection<RolePermission> RolePermissions => this.Roles.SelectMany(r => r.RolePermissions).ToList();
+    [NotMapped] public ICollection<Permission> Permissions => this.RolePermissions.Select(rp => rp.Permission).ToList();
 
     public void ResetLockTracking()
     {
