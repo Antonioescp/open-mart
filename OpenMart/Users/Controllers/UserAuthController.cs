@@ -6,8 +6,8 @@ using OpenMart.Crypto;
 using OpenMart.Data.Context;
 using OpenMart.Email;
 using OpenMart.Email.Data.Constants;
+using OpenMart.Email.Data.Model.Template;
 using OpenMart.EmailService;
-using OpenMart.EmailService.Constants;
 using OpenMart.Users.Data.Model;
 using OpenMart.Users.Data.Model.DTOs;
 using OpenMart.Users.Data.Model.DTOs.Auth;
@@ -42,7 +42,8 @@ public class UserAuthController : ControllerBase
         await _openMartDbContext.Users.AddAsync(user);
         await _openMartDbContext.SaveChangesAsync();
 
-        await this.SendEmail(user, EmailTemplateName.UserEmailConfirmation);
+        var templateArgs = _mapper.Map<UserEmailConfirmationTemplateModel>(user);
+        await this.SendEmail(EmailTemplateName.UserEmailConfirmation, user, templateArgs);
         return Ok();
     }
 
@@ -72,7 +73,7 @@ public class UserAuthController : ControllerBase
 
         if (user.IsLocked)
         {
-            await this.SendEmail(user, EmailTemplateName.UserAccountLocked);
+            await this.SendEmail(EmailTemplateName.UserAccountLocked, user);
         }
         return Unauthorized();
     }
@@ -97,7 +98,7 @@ public class UserAuthController : ControllerBase
         return PasswordHasher.ValidatePassword(password, salt, iterations, hashByteSize, hash);
     }
 
-    private async Task SendEmail(User user, EmailTemplateName templateName)
+    private async Task SendEmail(EmailTemplateName templateName, User user, object? args = null)
     {
         var emailSubject = await _openMartDbContext.EmailSubjects
             .Include(subject => subject.EmailTemplates)
@@ -111,7 +112,7 @@ public class UserAuthController : ControllerBase
         await _mailer
             .Receiver(user.FullName, user.Email)
             .Subject(emailSubject.Subject)
-            .Alternatives(emailSubject.EmailTemplates)
+            .TemplateAlternatives(emailSubject.EmailTemplates, args)
             .SendAsync();
     }
 }
