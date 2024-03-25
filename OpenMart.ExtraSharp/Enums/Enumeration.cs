@@ -26,7 +26,7 @@ public abstract class Enumeration<TId, T> : IComparable
         return typeMatches && valueMatches;
     }
 
-    public override int GetHashCode() => this.Id.GetHashCode() ^ this.Value.GetHashCode();
+    public override int GetHashCode() => this.Id.GetHashCode();
     public int CompareTo(object? obj) => (obj == null) ? 0 : this.Id.CompareTo(((Enumeration<TId, T>)obj).Id);
     public override string ToString() => this.Value as string 
                                          ?? base.ToString() 
