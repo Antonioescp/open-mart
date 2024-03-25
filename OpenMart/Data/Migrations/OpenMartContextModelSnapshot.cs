@@ -35,19 +35,19 @@ namespace OpenMart.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Subject")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("TemplateName")
+                    b.Property<string>("Subject")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TemplateName")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("EmailSubjects");
@@ -61,12 +61,12 @@ namespace OpenMart.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("EmailSubjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Template")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("EmailSubjectId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -75,7 +75,8 @@ namespace OpenMart.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmailSubjectId");
+                    b.HasIndex("EmailSubjectId", "Type")
+                        .IsUnique();
 
                     b.ToTable("EmailTemplates");
                 });
@@ -149,12 +150,17 @@ namespace OpenMart.Data.Migrations
             modelBuilder.Entity("OpenMart.Email.Data.Model.EmailTemplate", b =>
                 {
                     b.HasOne("OpenMart.Email.Data.Model.EmailSubject", "EmailSubject")
-                        .WithMany()
+                        .WithMany("EmailTemplates")
                         .HasForeignKey("EmailSubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EmailSubject");
+                });
+
+            modelBuilder.Entity("OpenMart.Email.Data.Model.EmailSubject", b =>
+                {
+                    b.Navigation("EmailTemplates");
                 });
 #pragma warning restore 612, 618
         }

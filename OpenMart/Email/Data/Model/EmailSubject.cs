@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 namespace OpenMart.Email.Data.Model;
 
 [Table("EmailSubjects")]
-[Index(nameof(TemplateName), IsUnique = true)]
+[Index(nameof(Name), IsUnique = true)]
 public class EmailSubject
 {
     [Key]
     public long Id { get; set; }
 
     [MaxLength(200)]
-    public string TemplateName { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     [MaxLength(500)]
     public string Description { get; set; } = null!;
 
-    [MaxLength(500)]
+    [MaxLength(200)]
     public string Subject { get; set; } = null!;
 
-    public ICollection<EmailTemplate> Templates = null!;
+    public ICollection<EmailTemplate> EmailTemplates { get; set; } = new List<EmailTemplate>();
 }

@@ -42,7 +42,7 @@ public class UserAuthController : ControllerBase
         await _openMartDbContext.Users.AddAsync(user);
         await _openMartDbContext.SaveChangesAsync();
 
-        await this.SendEmail(user, EmailTemplateType.UserEmailConfirmation);
+        await this.SendEmail(user, EmailTemplateName.UserEmailConfirmation);
         return Ok();
     }
 
@@ -72,7 +72,7 @@ public class UserAuthController : ControllerBase
 
         if (user.IsLocked)
         {
-            await this.SendEmail(user, EmailTemplateType.UserAccountLocked);
+            await this.SendEmail(user, EmailTemplateName.UserAccountLocked);
         }
         return Unauthorized();
     }
@@ -97,13 +97,13 @@ public class UserAuthController : ControllerBase
         return PasswordHasher.ValidatePassword(password, salt, iterations, hashByteSize, hash);
     }
 
-    private async Task SendEmail(User user, EmailTemplateType templateType)
+    private async Task SendEmail(User user, EmailTemplateName templateName)
     {
         var emailSubject = await _openMartDbContext.EmailSubjects
-            .Include(subject => subject.Templates)
-            .FirstOrDefaultAsync(subject => subject.TemplateName == templateType);
+            .Include(subject => subject.EmailTemplates)
+            .FirstOrDefaultAsync(subject => subject.Name == templateName);
 
-        if (emailSubject is null || !emailSubject.Templates.Any())
+        if (emailSubject is null || !emailSubject.EmailTemplates.Any())
         {
             return;
         }
@@ -111,7 +111,7 @@ public class UserAuthController : ControllerBase
         await _mailer
             .Receiver(user.FullName, user.Email)
             .Subject(emailSubject.Subject)
-            .Alternatives(emailSubject.Templates)
+            .Alternatives(emailSubject.EmailTemplates)
             .SendAsync();
     }
 }

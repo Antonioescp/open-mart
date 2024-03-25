@@ -9,7 +9,7 @@ public static class StmMailerExtensions
     {
         foreach (var template in templates)
         {
-            local.Alternative(template.Type, template.Template);
+            local.Alternative(template.Type, template.Content);
         }
 
         return local;

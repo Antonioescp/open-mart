@@ -50,8 +50,8 @@ public class SmtpMailerTests
     public void Supports_AlternativeBody_Email()
     {
         _mailer
-            .Alternative(TextPartType.Plain.Value, "What's up suckers")
-            .Alternative(TextPartType.Plain.Value, "Hey there");
+            .Alternative(TextPartType.Plain, "What's up suckers")
+            .Alternative(TextPartType.Plain, "Hey there");
         
         Assert.Multiple(() =>
         {
@@ -70,7 +70,7 @@ public class SmtpMailerTests
     {
         _mailer
             .Alternative(TextPartType.Plain, "Hello world")
-            .Alternative(TextPartType.Html.Value, "<h1><i>Hello</i> world!</h1>");
+            .Alternative(TextPartType.Html, "<h1><i>Hello</i> world!</h1>");
         
         Assert.Multiple(() =>
         {
@@ -103,11 +103,11 @@ public class SmtpMailerTests
     }
 
     [Test]
-    public void Sends_EmailWithBodyAndAttachment_Email()
+    public void Sends_WithBodyAndAttachment_Email()
     {
         _mailer
             .Subject("Unit test")
-            .Alternative(TextPartType.Plain, "Testing")
+            .Alternative(TextPartType.Plain, "Title body with important text.")
             .Alternative(TextPartType.Html, "<h1>Title</h1><p>body with <em>important</em> text.</p>")
             .Attachment("./test-attachment.txt", "text", "plain")
             .Send();

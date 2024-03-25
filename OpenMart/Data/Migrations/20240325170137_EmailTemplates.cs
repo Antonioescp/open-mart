@@ -16,9 +16,9 @@ namespace OpenMart.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TemplateName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                    Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,7 +33,7 @@ namespace OpenMart.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmailSubjectId = table.Column<long>(type: "bigint", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Template = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,15 +47,16 @@ namespace OpenMart.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmailSubjects_TemplateName",
+                name: "IX_EmailSubjects_Name",
                 table: "EmailSubjects",
-                column: "TemplateName",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmailTemplates_EmailSubjectId",
+                name: "IX_EmailTemplates_EmailSubjectId_Type",
                 table: "EmailTemplates",
-                column: "EmailSubjectId");
+                columns: new[] { "EmailSubjectId", "Type" },
+                unique: true);
         }
 
         /// <inheritdoc />

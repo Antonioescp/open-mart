@@ -31,8 +31,8 @@ public abstract class Enumeration<TId, T> : IComparable
     public override string ToString() => this.Value as string 
                                          ?? base.ToString() 
                                          ?? throw new InvalidOperationException();
-    public static implicit operator string(Enumeration<TId, T> value)
+    public static implicit operator T(Enumeration<TId, T> value)
     {
-        return value.ToString();
+        return value.Value;
     }
 }
