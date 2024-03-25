@@ -20,4 +20,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\OpenMart.ExtraSharp\OpenMart.ExtraSharp.csproj" />
+    </ItemGroup>
+
 </Project>
