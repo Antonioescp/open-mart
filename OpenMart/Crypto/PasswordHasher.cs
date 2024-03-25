@@ -7,16 +7,11 @@ namespace OpenMart.Crypto;
 
 public class PasswordHasher
 {
-    private SecureRandom _cryptoRandom;
+    private readonly SecureRandom _cryptoRandom = new();
 
-    public PasswordHasher()
-    {
-        _cryptoRandom = new SecureRandom();
-    }
-    
     public byte[] CreateSalt(int size)
     {
-        byte[] salt = new byte[size];
+        var salt = new byte[size];
         _cryptoRandom.NextBytes(salt);
         return salt;
     }
@@ -29,8 +24,8 @@ public class PasswordHasher
 
         return Convert.ToBase64String(hash);
     }
-    
-    public byte[] PBKDF2_SHA256_GetHash(string password, byte[] salt, int iterations, int hashByteSize)
+
+    private static byte[] PBKDF2_SHA256_GetHash(string password, byte[] salt, int iterations, int hashByteSize)
     {
         var pdb = new Pkcs5S2ParametersGenerator(new Org.BouncyCastle.Crypto.Digests.Sha256Digest());
         pdb.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt,
@@ -41,21 +36,21 @@ public class PasswordHasher
     
     public bool ValidatePassword(string password, string salt, int iterations, int hashByteSize, string hashAsBase64String)
     {
-        byte[] saltBytes = Convert.FromBase64String(salt);
-        byte[] actualHashBytes = Convert.FromBase64String(hashAsBase64String);
+        var saltBytes = Convert.FromBase64String(salt);
+        var actualHashBytes = Convert.FromBase64String(hashAsBase64String);
         return ValidatePassword(password, saltBytes, iterations, hashByteSize, actualHashBytes);
     }
-    
-    public bool ValidatePassword(string password, byte[] saltBytes, int iterations, int hashByteSize, byte[] actualGainedHasAsByteArray)
+
+    private bool ValidatePassword(string password, byte[] saltBytes, int iterations, int hashByteSize, byte[] actualGainedHasAsByteArray)
     {
-        byte[] testHash = PBKDF2_SHA256_GetHash(password, saltBytes, iterations, hashByteSize);
+        var testHash = PBKDF2_SHA256_GetHash(password, saltBytes, iterations, hashByteSize);
         return SlowEquals(actualGainedHasAsByteArray, testHash);
     }
     
-    private bool SlowEquals(byte[] a, byte[] b)
+    private static bool SlowEquals(byte[] a, byte[] b)
     {
-        uint diff = (uint)a.Length ^ (uint)b.Length;
-        for (int i = 0; i < a.Length && i < b.Length; i++)
+        var diff = (uint)a.Length ^ (uint)b.Length;
+        for (var i = 0; i < a.Length && i < b.Length; i++)
             diff |= (uint)(a[i] ^ b[i]);
         return diff == 0;
     }
