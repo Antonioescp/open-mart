@@ -11,6 +11,8 @@ public class OpenMartDbContext : DbContext
     }
 
     public DbSet<OpenMart.Users.Data.Model.User> Users { get; set; } = null!;
+    public DbSet<OpenMart.Email.Data.Model.EmailSubject> EmailSubjects { get; set; } = null!;
+    public DbSet<OpenMart.Email.Data.Model.EmailTemplate> EmailTemplates { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

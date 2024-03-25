@@ -48,14 +48,17 @@ public class User
     [Required]
     [DefaultValue(0)]
     public short InvalidLoginAttempts { get; set; }
-
-    [NotMapped]
-    public bool CanLogin => !this.IsLocked;
     
     [Required]
     public DateTime CreatedAt { get; set; }
     
     public DateTime? UpdatedAt { get; set; }
+
+    [NotMapped]
+    public bool CanLogin => !this.IsLocked;
+
+    [NotMapped]
+    public string FullName => $"{this.FirstName} {this.LastName}";
 
     public void ResetLockTracking()
     {

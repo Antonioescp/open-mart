@@ -92,7 +92,7 @@ public class SmtpMailer
                     && multipart.FirstOrDefault(part => part is TextPart) is TextPart existingTextPart)
                 {
                     var alternative = new MultipartAlternative();
-                    alternative.Add(existingAlternatives);
+                    alternative.Add(existingTextPart);
                     alternative.Add(textPart);
                     this.UpdateBody(alternative);
                 }
@@ -109,7 +109,7 @@ public class SmtpMailer
         return this;
     }
 
-    public async void SendAsync(SecureSocketOptions option = SecureSocketOptions.StartTls)
+    public async Task SendAsync(SecureSocketOptions option = SecureSocketOptions.StartTls)
     {
         await this.Client.ConnectAsync(this.Smtp, this.Port, option);
         await this.Client.AuthenticateAsync(this.AccountEmail, this.AccountPassword);

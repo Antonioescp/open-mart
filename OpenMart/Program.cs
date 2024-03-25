@@ -1,6 +1,8 @@
 using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using OpenMart.Data.Context;
+using OpenMart.EmailService;
+using OpenMart.EmailService.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,20 @@ builder.Services.AddApiVersioning(options =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Registering email service
+builder.Services.AddScoped<SmtpMailer>(_ =>
+{
+    var emailSettings = builder.Configuration.GetSection("SMTPService").Get<SmtpServiceConfiguration>();
+
+    if (emailSettings is null)
+    {
+        throw new InvalidOperationException();
+    }
+    
+    return new SmtpMailer(emailSettings.Url, emailSettings.Port, emailSettings.Email, emailSettings.Password)
+        .Sender(emailSettings.Sender, emailSettings.Email);
+});
 
 var app = builder.Build();
 

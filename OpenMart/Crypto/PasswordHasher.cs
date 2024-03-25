@@ -16,7 +16,7 @@ public class PasswordHasher
         return salt;
     }
     
-    public string PBKDF2_SHA256_GetHash(string password, string saltAsBase64String, int iterations, int hashByteSize)
+    public static string PBKDF2_SHA256_GetHash(string password, string saltAsBase64String, int iterations, int hashByteSize)
     {
         var saltBytes = Convert.FromBase64String(saltAsBase64String);
 
@@ -34,14 +34,14 @@ public class PasswordHasher
         return key.GetKey();
     }
     
-    public bool ValidatePassword(string password, string salt, int iterations, int hashByteSize, string hashAsBase64String)
+    public static bool ValidatePassword(string password, string salt, int iterations, int hashByteSize, string hashAsBase64String)
     {
         var saltBytes = Convert.FromBase64String(salt);
         var actualHashBytes = Convert.FromBase64String(hashAsBase64String);
         return ValidatePassword(password, saltBytes, iterations, hashByteSize, actualHashBytes);
     }
 
-    private bool ValidatePassword(string password, byte[] saltBytes, int iterations, int hashByteSize, byte[] actualGainedHasAsByteArray)
+    private static bool ValidatePassword(string password, byte[] saltBytes, int iterations, int hashByteSize, byte[] actualGainedHasAsByteArray)
     {
         var testHash = PBKDF2_SHA256_GetHash(password, saltBytes, iterations, hashByteSize);
         return SlowEquals(actualGainedHasAsByteArray, testHash);

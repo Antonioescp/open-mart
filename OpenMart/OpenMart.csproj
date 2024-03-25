@@ -1,17 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>05be573c-3cca-47c5-849f-ddeb536d7feb</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Asp.Versioning.Http" Version="7.1.0" />
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
         <PackageReference Include="AutoMapper" Version="13.0.1" />
-        <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.17" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.17">
           <PrivateAssets>all</PrivateAssets>
@@ -19,7 +19,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.17" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.17" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -32,6 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\OpenMart.EmailService\OpenMart.EmailService.csproj" />
       <ProjectReference Include="..\OpenMart.ExtraSharp\OpenMart.ExtraSharp.csproj" />
     </ItemGroup>
 
