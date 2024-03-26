@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMart.EmailService.Test"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMart.ExtraSharp", "OpenMart.ExtraSharp\OpenMart.ExtraSharp.csproj", "{193A8CCE-C1A4-49EA-A6EE-DEFC875E41BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMart.JwtService", "OpenMart.JwtService\OpenMart.JwtService.csproj", "{8FA78141-048C-42F9-A93B-155C4204525D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenMart.JwtService.Test", "OpenMart.JwtService.Test\OpenMart.JwtService.Test.csproj", "{B3C7FFFB-2071-46DC-956D-A3C4118C52EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{193A8CCE-C1A4-49EA-A6EE-DEFC875E41BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{193A8CCE-C1A4-49EA-A6EE-DEFC875E41BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{193A8CCE-C1A4-49EA-A6EE-DEFC875E41BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA78141-048C-42F9-A93B-155C4204525D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA78141-048C-42F9-A93B-155C4204525D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA78141-048C-42F9-A93B-155C4204525D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA78141-048C-42F9-A93B-155C4204525D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C7FFFB-2071-46DC-956D-A3C4118C52EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C7FFFB-2071-46DC-956D-A3C4118C52EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C7FFFB-2071-46DC-956D-A3C4118C52EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C7FFFB-2071-46DC-956D-A3C4118C52EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
